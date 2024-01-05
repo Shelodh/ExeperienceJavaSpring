@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+</head>
+<body>
+
+    <h1>Ma ToDo List</h1>
+
+    <form th:action="@{/}" th:object="${newTask}" method="post">
+        <label>Description:</label>
+        <input type="text" th:field="*{description}" required>
+        <button type="submit">Ajouter une tâche</button>
+    </form>
+
+    <ul>
+        <li th:each="task : ${tasks}">
+            <span th:text="${task.description}"></span>
+            <a th:href="@{'/' + task.id}">(éditer)</a>
+            <a th:href="@{'/' + task.id}" th:method="delete">(supprimer)</a>
+        </li>
+    </ul>
+
+</body>
+</html>
