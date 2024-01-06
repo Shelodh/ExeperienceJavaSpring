@@ -18,7 +18,7 @@ public class TaskController {
     public String getAllTasks(Model model) {
         List<Task> tasks = taskRepository.findAll();
         model.addAttribute("tasks", tasks);
-        model.addAttribute("newTask", new Task()); // pour le formulaire d'ajout
+        model.addAttribute("newTask", new Task());
         return "index";
     }
 
@@ -29,8 +29,19 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public String editTask(@PathVariable Long id, Model model) {
-        Task task = taskRepository.findById(id).orElse(null);
+    public String editTask(@PathVariable String id, Model model) {
+        if ("favicon.ico".equals(id)) {
+            return "redirect:/";
+        }
+
+        Long taskId;
+        try {
+            taskId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            return "redirect:/";
+        }
+
+        Task task = taskRepository.findById(taskId).orElse(null);
         if (task != null) {
             model.addAttribute("task", task);
             return "edit";
@@ -38,6 +49,7 @@ public class TaskController {
             return "redirect:/";
         }
     }
+
 
     @PutMapping("/{id}")
     public String updateTask(@PathVariable Long id, @ModelAttribute Task updatedTask) {

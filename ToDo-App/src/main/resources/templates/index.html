@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo List</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
 <body>
 
@@ -18,10 +19,35 @@
     <ul>
         <li th:each="task : ${tasks}">
             <span th:text="${task.description}"></span>
-            <a th:href="@{'/' + task.id}">(éditer)</a>
-            <a th:href="@{'/' + task.id}" th:method="delete">(supprimer)</a>
+
+            <!-- Form for Editing Task -->
+            <form th:action="@{'/' + task.id}" method="put">
+                <button type="button" onclick="toggleEdit('editInput', 'editButton')">(éditer)</button>
+                <input type="text" id="editInput" name="editInput" th:value="${task.description}" style="display:none;">
+                <button type="submit" id="editButton" style="display:none;">Confirmer</button>
+            </form>
+
+            <!-- Form for Deleting Task -->
+            <form th:action="@{'/' + task.id}" method="delete">
+                <button type="submit">(supprimer)</button>
+            </form>
         </li>
     </ul>
+
+    <script>
+        function toggleEdit(inputId, buttonId) {
+            var inputElement = document.getElementById(inputId);
+            var buttonElement = document.getElementById(buttonId);
+
+            if (inputElement.style.display === "none") {
+                inputElement.style.display = "inline";
+                buttonElement.style.display = "inline";
+            } else {
+                inputElement.style.display = "none";
+                buttonElement.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
